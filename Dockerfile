@@ -3,7 +3,7 @@ FROM ubuntu:22.04 AS base
 RUN apt-get update && apt-get install -y git
 
 WORKDIR /workspace/singbox
-RUN git clone https://github.com/SagerNet/sing-box.git .
+RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.10.0-alpha.27
 FROM golang:1.22.4-alpine AS builder
 
 COPY --from=base /workspace/singbox /singbox
