@@ -1,15 +1,11 @@
-FROM ubuntu:22.04 AS base
-
-RUN apt-get update && apt-get install -y git
-
-WORKDIR /workspace/singbox
-RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.10.0-alpha.29
 FROM golang:1.22.4-alpine AS builder
 
-COPY --from=base /workspace/singbox /singbox
+RUN apk update && apk add --no-cache git
+
+WORKDIR /singbox
+RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.10.0-alpha.29
 
 #build singbox
-WORKDIR /singbox
 
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
@@ -19,7 +15,7 @@ ENV CGO_ENABLED=1
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
-    && apk add git build-base  linux-headers\
+    && apk add build-base  linux-headers\
     && export COMMIT=$(git rev-parse --short HEAD) \
     && export VERSION=$(go run ./cmd/internal/read_tag) \
     && go build -v -trimpath -tags \
