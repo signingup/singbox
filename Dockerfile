@@ -26,7 +26,7 @@ RUN set -ex \
 
 FROM alpine:latest
 
-RUN apk add --no-cache sed tzdata grep dcron openrc bash curl bc keepalived tcptraceroute radvd nano wget ca-certificates iptables ip6tables openssh jq iproute2 net-tools bind-tools htop vim
+RUN apk add --no-cache sed tzdata grep dcron openrc bash curl bc keepalived tcptraceroute radvd nano wget ca-certificates tor iptables ip6tables openssh jq iproute2 net-tools bind-tools htop vim
 
 COPY --from=builder /go/bin/* /usr/local/bin/
 # For compat with the previous run.sh, although ideally you should be
