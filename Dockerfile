@@ -11,7 +11,7 @@ ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 ARG GOPROXY=""
 ENV GOPROXY ${GOPROXY}
-ENV CGO_ENABLED=1
+ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
@@ -24,15 +24,9 @@ RUN set -ex \
         -ldflags "-X \"github.com/sagernet/sing-box/constant.Version=$VERSION\" -s -w -buildid=" \
         ./cmd/sing-box
 
-FROM alpine:latest
+FROM scratch
 
-RUN apk add --no-cache sed tzdata grep dcron openrc bash curl bc keepalived tcptraceroute radvd nano wget ca-certificates tor iptables ip6tables openssh jq iproute2 net-tools bind-tools htop vim
+COPY --from=builder /go/bin/sing-box /usr/local/bin/sing-box
+COPY --from=builder /etc/ssl /etc/ssl
 
-COPY --from=builder /go/bin/* /usr/local/bin/
-# For compat with the previous run.sh, although ideally you should be
-# using build_docker.sh which sets an entrypoint for the image.
-
-ENV TZ=UTC
-RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-ENTRYPOINT ["sing-box"]
+CMD ["/usr/bin/sing-box", "run", "-D", "/etc/sing-box"]
