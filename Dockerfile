@@ -29,4 +29,4 @@ FROM scratch
 COPY --from=builder /go/bin/sing-box /usr/local/bin/sing-box
 COPY --from=builder /etc/ssl /etc/ssl
 
-CMD ["/usr/bin/sing-box", "run", "-D", "/etc/sing-box"]
+CMD ["/usr/local/bin/sing-box", "run", "-D", "/etc/sing-box"]
