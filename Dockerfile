@@ -1,9 +1,9 @@
-FROM golang:1.25-alpine AS builder
+FROM golang:1.25.1-alpine AS builder
 
 RUN apk update && apk add --no-cache git
 
 WORKDIR /singbox
-RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.12.4
+RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.13.0-alpha.9
 
 #build singbox
 
@@ -21,7 +21,7 @@ RUN set -ex \
     && go build -v -trimpath -tags \
         "with_gvisor,with_quic,with_dhcp,with_wireguard,with_utls,with_acme,with_clash_api,with_embedded_tor,staticOpenssl,staticZlib,staticLibevent,with_tailscale" \
         -o /go/bin/sing-box \
-        -ldflags "-X \"github.com/sagernet/sing-box/constant.Version=$VERSION\" -s -w -buildid=" \
+        -ldflags "-X \"github.com/sagernet/sing-box/constant.Version=$VERSION\" -s -w -buildid= -checklinkname=0" \
         ./cmd/sing-box
 
 FROM scratch
