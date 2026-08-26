@@ -3,7 +3,7 @@ FROM golang:1.26-alpine AS builder
 RUN apk update && apk add --no-cache git
 
 WORKDIR /singbox
-RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.14.0-beta.17
+RUN git clone https://github.com/SagerNet/sing-box.git . && git checkout v1.14.0-rc.1
 
 #build singbox
 
